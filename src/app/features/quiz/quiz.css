@@ -1,0 +1,17 @@
+/* Quiz: hero + cards */
+.quiz-root{max-width:900px;margin:20px auto;padding:0 12px}
+.quiz-hero{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(90deg,#eef2ff,#fff);padding:14px;border-radius:10px;margin-bottom:12px}
+.quiz-hero h2{margin:0;font-size:20px}
+.quiz-progress{color:#475569;font-weight:600}
+.question-card{background:#fff;padding:16px;border-radius:12px;margin-bottom:12px;border:1px solid rgba(15,23,42,0.04);box-shadow:0 8px 20px rgba(2,6,23,0.03)}
+.question-title{font-weight:700;margin-bottom:10px;color:#0f1720}
+.options{display:flex;flex-direction:column;gap:10px}
+.option{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:#f8fafc;cursor:pointer;border:1px solid transparent}
+.option input{transform:scale(1.05)}
+.option.selected{background:linear-gradient(90deg,#06b6d4,#10b981);color:#042022;border-color:rgba(2,6,23,0.04)}
+.quiz-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+.btn-ghost{background:transparent;border:1px solid rgba(15,23,42,0.06);padding:8px 12px;border-radius:8px}
+.btn-primary{background:linear-gradient(90deg,#0ea5a9,#06b6d4);border:none;color:#042022;padding:8px 12px;border-radius:8px}
+.score-card{margin-top:12px;background:#111827;color:#fff;padding:12px;border-radius:10px;text-align:center}
+.empty-root{max-width:900px;margin:20px auto;padding:12px;background:#fff;border-radius:8px;text-align:center}
+.muted{color:#6b7280}

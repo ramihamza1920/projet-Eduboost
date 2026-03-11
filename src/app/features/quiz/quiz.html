@@ -1,0 +1,29 @@
+<div class="quiz-root" *ngIf="quiz">
+  <header class="quiz-hero">
+    <div>
+      <h2>{{ quiz.title }}</h2>
+      <div class="muted">{{ quiz.questions?.length || 0 }} questions</div>
+    </div>
+    <div class="quiz-progress">Answered: {{ answeredCount() }} / {{ quiz.questions?.length || 0 }}</div>
+  </header>
+
+  <form (ngSubmit)="submit()" class="quiz-body">
+    <div *ngFor="let q of quiz.questions; let i = index" class="question-card">
+      <div class="question-title">{{ i + 1 }}. {{ q.q }}</div>
+      <div class="options">
+        <label *ngFor="let opt of q.a; let j = index" class="option" [class.selected]="answers[i]===j">
+          <input type="radio" name="q{{i}}" (change)="answers[i]=j" [checked]="answers[i]===j" />
+          <span>{{ opt }}</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="quiz-actions">
+      <button class="btn btn-ghost" type="button" (click)="reset()">Reset</button>
+      <button class="btn btn-primary" type="submit">Submit Quiz</button>
+    </div>
+  </form>
+
+  <div *ngIf="score !== null" class="score-card">Score: <strong>{{ score }}%</strong></div>
+</div>
+<div *ngIf="!quiz" class="empty-root">Quiz not found</div>
