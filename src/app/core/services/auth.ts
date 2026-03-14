@@ -14,7 +14,7 @@ export class AuthService {
   private ensureSeedData() {
     if (!localStorage.getItem('eduboost_users')) {
       const users = [
-        { id: 1, name: 'Admin User', email: 'admin@eduboost.com', password: 'admin', role: 'admin', disabled: false, phone: '+213 555 0001', avatar: 'AU', joinDate: '2024-01-01' },
+        { id: 1, name: 'Admin User', email: 'ramihamza@eduboost.com', password: 'ramihamza@eduboost.com', role: 'admin', disabled: false, phone: '+213 555 0001', avatar: 'AU', joinDate: '2024-01-01' },
         { id: 2, name: 'Alice Martin', email: 'student@eduboost.com', password: 'student', role: 'student', disabled: false, phone: '+213 555 0002', avatar: 'AM', joinDate: '2024-02-15' },
         { id: 3, name: 'Bob Dupont', email: 'bob@eduboost.com', password: 'student', role: 'student', disabled: false, phone: '+213 555 0003', avatar: 'BD', joinDate: '2024-03-10' },
         { id: 4, name: 'Clara Souza', email: 'clara@eduboost.com', password: 'student', role: 'student', disabled: true, phone: '+213 555 0004', avatar: 'CS', joinDate: '2024-04-05' },

@@ -23,7 +23,7 @@
   width:380px;
   padding:40px;
 
-  background:rgba(255,255,255,0.15);
+  background:rgba(25, 78, 4, 0.534);
 
   border-radius:12px;
 
@@ -33,7 +33,7 @@
 
   text-align:center;
 
-  color:white;
+  color:rgb(255, 255, 255);
 }
 
 .title{

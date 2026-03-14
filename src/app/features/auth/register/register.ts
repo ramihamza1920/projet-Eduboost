@@ -17,7 +17,7 @@ export class RegisterComponent {
   // Variables pour stocker les valeurs (corrigé)
   nameValue: string = '';        // Changé de 'name' à 'nameValue'
   emailValue: string = '';       // Changé de 'email' à 'emailValue'
-  phoneValue: string = '';       // Changé de 'phone' à 'phoneValue'
+         // Changé de 'phone' à 'phoneValue'
   passwordValue: string = '';
   confirmPasswordValue: string = '';
   agreeTerms: boolean = false;
@@ -45,7 +45,7 @@ export class RegisterComponent {
     return (
       this.nameValue.length >= 3 &&
       this.isValidEmail(this.emailValue) &&
-      this.isValidPhone(this.phoneValue) &&
+      
       this.isValidPassword(this.passwordValue) &&
       this.passwordValue === this.confirmPasswordValue &&
       this.agreeTerms

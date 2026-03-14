@@ -26,10 +26,7 @@ export const routes: Routes = [
     path: 'mentor/courses',
     loadComponent: () => import('./mentor/courses/courses').then(m => m.Courses)
   },
-  {
-    path: 'mentor/trainers',
-    loadComponent: () => import('./mentor/trainers/trainers').then(m => m.Trainers)
-  },
+  
   {
     path: 'mentor/pricing',
     loadComponent: () => import('./mentor/pricing/pricing').then(m => m.Pricing)

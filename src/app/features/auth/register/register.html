@@ -31,24 +31,24 @@
     <form (ngSubmit)="onRegister()" #registerForm="ngForm">
       <!-- Full Name - CORRIGÉ -->
       <div class="form-group" [class.error]="name.invalid && (name.dirty || name.touched || submitted)">
-        <label>Full Name</label>
+        <label>Username</label>
         <input 
           type="text"
           [(ngModel)]="nameValue"  
           name="name"
           #name="ngModel"
-          placeholder="Enter your full name"
+          placeholder="Enter your username"
           required
           minlength="3">
         <div class="error-message" *ngIf="name.invalid && (name.dirty || name.touched || submitted)">
-          <span *ngIf="name.errors?.['required']">Full name is required</span>
+          <span *ngIf="name.errors?.['required']">Username is required</span>
           <span *ngIf="name.errors?.['minlength']">Minimum 3 characters required</span>
         </div>
       </div>
 
       <!-- Email - CORRIGÉ -->
       <div class="form-group" [class.error]="email.invalid && (email.dirty || email.touched || submitted)">
-        <label>Email Address</label>
+        <label>Email </label>
         <input 
           type="email"
           [(ngModel)]="emailValue"  
@@ -63,7 +63,7 @@
         </div>
       </div>
 
-      <!-- Phone - CORRIGÉ -->
+      <!-- Phone - CORRIGÉ 
       <div class="form-group" [class.error]="phone.invalid && (phone.dirty || phone.touched || submitted)">
         <label>Phone Number</label>
         <input 
@@ -78,7 +78,7 @@
           <span *ngIf="phone.errors?.['required']">Phone number is required</span>
           <span *ngIf="phone.errors?.['pattern']">Enter valid phone number (10-15 digits)</span>
         </div>
-      </div>
+      </div>-->
 
       <!-- Password -->
       <div class="form-group" [class.error]="password.invalid && (password.dirty || password.touched || submitted)">
