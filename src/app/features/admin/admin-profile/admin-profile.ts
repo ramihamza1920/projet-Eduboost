@@ -5,13 +5,13 @@ import { AuthService } from '../../../core/services/auth';
 import { CourseService } from '../../../core/services/course.service';
 
 @Component({
-  selector: 'app-student-profile',
+  selector: 'app-admin-profile',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './student-profile.html',
-  styleUrls: ['./student-profile.css']
+  templateUrl: './admin-profile.html',
+  styleUrls: ['./admin-profile.css']
 })
-export class StudentProfileComponent implements OnInit {
+export class AdminProfileComponent implements OnInit {
   user: any = null;
   editMode  = false;
   editForm: any = {};
@@ -22,15 +22,21 @@ export class StudentProfileComponent implements OnInit {
   pwForm = { current: '', newPw: '', confirm: '' };
   pwError = '';
 
-  quizCount  = 0;
-  avgScore   = 0;
-  courseCount = 0;
+  totalUsers   = 0;
+  totalCourses = 0;
+  activeUsers  = 0;
 
-  achievements = [
-    { icon: '🎯', label: 'First Quiz Passed',    date: 'Jan 2026', color: 'indigo' },
-    { icon: '📚', label: '5 Chapters Done',       date: 'Feb 2026', color: 'cyan'   },
-    { icon: '🔥', label: '7-Day Streak',           date: 'Feb 2026', color: 'amber'  },
-    { icon: '⭐', label: 'Top Scorer',              date: 'Mar 2026', color: 'green'  },
+  permissions = [
+    'User Management', 'Course Management',
+    'Analytics & Reports', 'System Configuration',
+    'Content Moderation', 'Security Settings',
+  ];
+
+  activity = [
+    { icon: '👤', color: 'blue',   label: 'New student registered',      sub: 'Alice Martin joined EduBoost',              time: '2h ago' },
+    { icon: '📚', color: 'purple', label: 'Course updated',               sub: 'Python Programming — new chapter added',    time: '5h ago' },
+    { icon: '⚠️', color: 'amber',  label: 'System settings modified',     sub: 'Notification preferences updated',          time: '1d ago' },
+    { icon: '✅', color: 'green',  label: 'Quiz published',               sub: 'Data Science Fundamentals — quiz live',     time: '2d ago' },
   ];
 
   constructor(
@@ -41,15 +47,11 @@ export class StudentProfileComponent implements OnInit {
 
   ngOnInit() {
     if (!isPlatformBrowser(this.platformId)) return;
-    this.user = this.auth.getCurrentUser();
-    this.courseCount = this.cs.list().length;
-    if (this.user) {
-      const attempts = this.cs.getAttemptsForUser(this.user.id);
-      this.quizCount = attempts.length;
-      this.avgScore  = attempts.length
-        ? Math.round(attempts.reduce((s: number, a: any) => s + a.score, 0) / attempts.length)
-        : 0;
-    }
+    this.user        = this.auth.getCurrentUser();
+    const users      = this.auth.listUsers();
+    this.totalUsers  = users.length;
+    this.activeUsers = users.filter((u: any) => !u.disabled).length;
+    this.totalCourses = this.cs.list().length;
   }
 
   startEdit() {
@@ -97,7 +99,7 @@ export class StudentProfileComponent implements OnInit {
   }
 
   getInitials() {
-    return this.user?.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) || 'ST';
+    return this.user?.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) || 'AD';
   }
   getJoinDate() {
     return this.user?.joinDate

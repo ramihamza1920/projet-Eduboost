@@ -20,7 +20,7 @@
   flex: 1.2;
   position: relative;
   background: 
-    linear-gradient(135deg, rgba(106, 17, 203, 0.85) 0%, rgba(37, 117, 252, 0.85) 100%),
+    linear-gradient(135deg, rgba(25, 78, 4, 0.534) 0%, rgba(25, 78, 4, 0.534) 100%),
     url("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80");
   background-size: cover;
   background-position: center;
@@ -121,7 +121,7 @@
   box-shadow: -10px 0 30px rgba(0,0,0,0.1);
   height: 100vh; /* Prend toute la hauteur */
   scrollbar-width: thin; /* Pour Firefox */
-  scrollbar-color: #6a11cb #f0f0f0; /* Pour Firefox */
+  scrollbar-color: rgba(25, 78, 4, 0.534) #f0f0f0; /* Pour Firefox */
 }
 
 /* Style de la scrollbar pour Chrome/Safari */
@@ -135,7 +135,7 @@
 }
 
 .register-form::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  background: linear-gradient(135deg, rgba(25, 78, 4, 0.534), rgba(25, 78, 4, 0.534));
   border-radius: 10px;
 }
 
@@ -149,7 +149,7 @@
   font-weight: 700;
   color: #1a1a1a;
   margin-bottom: 8px;
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  background: linear-gradient(135deg, rgba(25, 78, 4, 0.534) 0%, rgba(25, 78, 4, 0.534) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.2;
@@ -187,7 +187,7 @@
 }
 
 .form-group input:focus {
-  border-color: #6a11cb;
+  border-color: rgba(25, 78, 4, 0.534);;
   background: #fff;
   box-shadow: 0 5px 15px rgba(106, 17, 203, 0.1);
   outline: none;
@@ -219,7 +219,7 @@
 }
 
 .toggle-password:hover {
-  color: #6a11cb;
+  color: rgba(25, 78, 4, 0.534);
 }
 
 /* Password Strength */
@@ -281,7 +281,7 @@
 }
 
 .checkbox-label a {
-  color: #6a11cb;
+  color: rgba(25, 78, 4, 0.534);
   text-decoration: none;
   font-weight: 500;
   white-space: nowrap; /* Empêche la rupture du lien */
@@ -297,7 +297,7 @@
   padding: 12px 16px;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  background: linear-gradient(135deg, rgba(25, 78, 4, 0.534) 0%, rgba(25, 78, 4, 0.534) 100%);
   color: white;
   font-size: 1rem;
   font-weight: 600;
@@ -450,7 +450,7 @@
 }
 
 .signin-link a {
-  color: #6a11cb;
+  color: rgba(25, 78, 4, 0.534);;
   cursor: pointer;
   text-decoration: none;
   font-weight: 600;

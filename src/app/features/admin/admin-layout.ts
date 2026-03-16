@@ -21,7 +21,7 @@ export default class AdminLayoutComponent implements OnInit {
   notifMenuOpen = false;
   notifications: any[] = [];
   unreadCount = 0;
-  breadcrumbs: {label:string, link?:string}[] = [];
+  breadcrumbs: {label: string; link?: string}[] = [];
   isDark = false;
 
   constructor(
@@ -34,15 +34,14 @@ export default class AdminLayoutComponent implements OnInit {
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    // Restore saved theme
     const saved = localStorage.getItem('eduboost_theme') || 'light';
     this.isDark = saved === 'dark';
     document.documentElement.setAttribute('data-theme', saved);
 
     const user = this.auth.getCurrentUser();
     if (user) {
-      this.userName = user.name || 'Admin';
-      this.userEmail = user.email || '';
+      this.userName   = user.name  || 'Admin';
+      this.userEmail  = user.email || '';
       this.userAvatar = user.avatar ||
         (user.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)) || 'AD';
     }
@@ -65,35 +64,41 @@ export default class AdminLayoutComponent implements OnInit {
   }
 
   buildBreadcrumbs(url: string) {
-    if (url === '/admin') {
-      this.breadcrumbs = [{ label: 'Dashboard' }];
-    } else if (url.includes('/admin/users')) {
-      this.breadcrumbs = [{ label: 'Admin', link: '/admin' }, { label: 'Users' }];
-    } else if (url.includes('/admin/courses')) {
-      this.breadcrumbs = [{ label: 'Admin', link: '/admin' }, { label: 'Courses' }];
-    } else if (url.includes('/catalog')) {
-      this.breadcrumbs = [{ label: 'Home', link: '/home' }, { label: 'Catalog' }];
-    } else if (url.includes('/chatbot')) {
-      this.breadcrumbs = [{ label: 'Home', link: '/home' }, { label: 'Chatbot' }];
-    } else {
-      this.breadcrumbs = [{ label: 'Admin', link: '/admin' }];
-    }
+    if      (url === '/admin')            this.breadcrumbs = [{ label: 'Dashboard' }];
+    else if (url.includes('/admin/users'))   this.breadcrumbs = [{ label: 'Admin', link: '/admin' }, { label: 'Users' }];
+    else if (url.includes('/admin/courses')) this.breadcrumbs = [{ label: 'Admin', link: '/admin' }, { label: 'Courses' }];
+    // ✅ Admin profile breadcrumb
+    else if (url.includes('/admin/profile')) this.breadcrumbs = [{ label: 'Admin', link: '/admin' }, { label: 'Profile' }];
+    else if (url.includes('/catalog'))       this.breadcrumbs = [{ label: 'Home', link: '/home' }, { label: 'Catalog' }];
+    else if (url.includes('/chatbot'))       this.breadcrumbs = [{ label: 'Home', link: '/home' }, { label: 'Chatbot' }];
+    else                                     this.breadcrumbs = [{ label: 'Admin', link: '/admin' }];
   }
 
   loadNotifications() {
     this.notifications = this.auth.getNotifications();
-    this.unreadCount = this.auth.getUnreadCount();
+    this.unreadCount   = this.auth.getUnreadCount();
   }
 
-  toggleSidebar() { this.sidebarOpen = !this.sidebarOpen; }
+  toggleSidebar()      { this.sidebarOpen = !this.sidebarOpen; }
   toggleProfileMenu(e: Event) { e.stopPropagation(); this.profileMenuOpen = !this.profileMenuOpen; this.notifMenuOpen = false; }
-  toggleNotifMenu(e: Event) { e.stopPropagation(); this.notifMenuOpen = !this.notifMenuOpen; this.profileMenuOpen = false; }
+  toggleNotifMenu(e: Event)   { e.stopPropagation(); this.notifMenuOpen = !this.notifMenuOpen; this.profileMenuOpen = false; }
 
   @HostListener('document:click')
   closeMenus() { this.profileMenuOpen = false; this.notifMenuOpen = false; }
 
   markAllRead() { this.auth.markAllNotificationsRead(); this.loadNotifications(); }
-  navigateTo(link: string) { this.profileMenuOpen = false; this.router.navigate([link]); }
-  goBack() { this.location.back(); }
-  logout() { this.profileMenuOpen = false; this.auth.logout(); }
+
+  navigateTo(link: string) {
+    this.profileMenuOpen = false;
+    this.router.navigate([link]);
+  }
+
+  // ✅ FIX: Admin profile goes to /admin/profile, NOT /dashboard/profile
+  goToProfile() {
+    this.profileMenuOpen = false;
+    this.router.navigate(['/admin/profile']);
+  }
+
+  goBack()  { this.location.back(); }
+  logout()  { this.profileMenuOpen = false; this.auth.logout(); }
 }

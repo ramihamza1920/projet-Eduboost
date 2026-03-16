@@ -13,14 +13,17 @@ import { AuthService } from '../../../core/services/auth';
 export class StudentSettingsComponent implements OnInit {
   toast = ''; toastType = 'success'; toastTimer: any;
   showDeleteConfirm = false;
+  activeSection: 'notifications' | 'privacy' | 'preferences' | 'data' = 'notifications';
 
   prefs = {
-    emailNotifs:   true,
+    emailNotifs:    true,
     progressAlerts: true,
     quizReminders:  false,
     newsletter:     false,
     language:       'English',
     theme:          'dark',
+    videoQuality:   'auto',
+    subtitles:      'off',
   };
 
   privacy = {
@@ -35,9 +38,7 @@ export class StudentSettingsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
+    if (!isPlatformBrowser(this.platformId)) return;
     const saved = localStorage.getItem('student_prefs');
     if (saved) { try { this.prefs = { ...this.prefs, ...JSON.parse(saved) }; } catch {} }
     const savedPv = localStorage.getItem('student_privacy');
@@ -49,7 +50,7 @@ export class StudentSettingsComponent implements OnInit {
       localStorage.setItem('student_prefs', JSON.stringify(this.prefs));
     }
     this.showToast('Notification preferences saved!', 'success');
-    this.auth.addNotification('Notification settings updated', 'indigo');
+    this.auth.addNotification('Notification settings updated', 'green');
   }
 
   savePrivacy() {
@@ -59,7 +60,15 @@ export class StudentSettingsComponent implements OnInit {
     this.showToast('Privacy settings saved!', 'success');
   }
 
+  savePrefs() {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('student_prefs', JSON.stringify(this.prefs));
+    }
+    this.showToast('Preferences saved!', 'success');
+  }
+
   exportData() {
+    if (!isPlatformBrowser(this.platformId)) return;
     const user = this.auth.getCurrentUser();
     const data = { user, prefs: this.prefs, privacy: this.privacy, exportedAt: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -67,14 +76,15 @@ export class StudentSettingsComponent implements OnInit {
     const a    = document.createElement('a');
     a.href = url; a.download = 'eduboost-data.json'; a.click();
     URL.revokeObjectURL(url);
-    this.showToast('Data exported successfully!', 'success');
+    this.showToast('Data exported!', 'info');
   }
 
   confirmDelete() { this.showDeleteConfirm = true; }
   cancelDelete()  { this.showDeleteConfirm = false; }
+
   deleteAccount() {
     this.showDeleteConfirm = false;
-    this.showToast('Account scheduled for deletion. You will be signed out.', 'danger');
+    this.showToast('Account deleted. Signing out…', 'danger');
     setTimeout(() => this.auth.logout(), 2500);
   }
 

@@ -1,269 +1,230 @@
-<!-- Toast -->
-<div class="s-toast" *ngIf="toast" [ngClass]="'toast-'+toastType">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+<!-- ══ TOAST ══ -->
+<div class="sp-toast" *ngIf="toast" [class]="'sp-toast--'+toastType">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15">
     <polyline *ngIf="toastType==='success'" points="20 6 9 17 4 12"/>
     <ng-container *ngIf="toastType==='danger'"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></ng-container>
-    <ng-container *ngIf="toastType==='info'"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></ng-container>
   </svg>
   {{ toast }}
 </div>
 
-<!-- Password Modal -->
-<div class="sprof-overlay" *ngIf="showPwModal" (click)="showPwModal=false">
-  <div class="sprof-pw-modal" (click)="$event.stopPropagation()">
-    <!-- Header -->
-    <div class="sprof-pw-head">
-      <div class="sprof-pw-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+<!-- ══ PASSWORD MODAL ══ -->
+<div class="sp-overlay" *ngIf="showPwModal" (click)="showPwModal=false">
+  <div class="sp-modal" (click)="$event.stopPropagation()">
+    <div class="sp-modal-head">
+      <div class="sp-modal-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
       </div>
-      <div>
-        <h3>Change Password</h3>
-        <p>Keep your account secure with a strong password</p>
-      </div>
-      <button class="sprof-pw-close" (click)="showPwModal=false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <div><h3>Change Password</h3><p>Keep your account secure</p></div>
+      <button class="sp-modal-close" (click)="showPwModal=false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
       </button>
     </div>
-
-    <!-- Error -->
-    <div class="sprof-pw-err" *ngIf="pwError">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      {{ pwError }}
+    <div class="sp-modal-err" *ngIf="pwError">⚠ {{ pwError }}</div>
+    <div class="sp-modal-body">
+      <div class="sp-field"><label>Current Password</label>
+        <input type="password" [(ngModel)]="pwForm.current" placeholder="••••••••"/></div>
+      <div class="sp-field"><label>New Password</label>
+        <input type="password" [(ngModel)]="pwForm.newPw" placeholder="min 4 characters"/></div>
+      <div class="sp-field"><label>Confirm Password</label>
+        <input type="password" [(ngModel)]="pwForm.confirm" placeholder="repeat new password"/></div>
     </div>
-
-    <!-- Fields -->
-    <div class="sprof-pw-body">
-      <div class="sprof-pw-field">
-        <label>Current Password</label>
-        <div class="sprof-pw-input">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" [(ngModel)]="pwForm.current" placeholder="Enter current password" />
-        </div>
-      </div>
-      <div class="sprof-pw-field">
-        <label>New Password</label>
-        <div class="sprof-pw-input">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" [(ngModel)]="pwForm.newPw" placeholder="Enter new password" />
-        </div>
-      </div>
-      <div class="sprof-pw-field">
-        <label>Confirm New Password</label>
-        <div class="sprof-pw-input">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" [(ngModel)]="pwForm.confirm" placeholder="Confirm new password" />
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="sprof-pw-foot">
-      <button class="sprof-btn-ghost" (click)="showPwModal=false">Cancel</button>
-      <button class="sprof-btn-primary" (click)="changePassword()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        Update Password
-      </button>
+    <div class="sp-modal-foot">
+      <button class="sp-btn sp-btn--ghost" (click)="showPwModal=false">Cancel</button>
+      <button class="sp-btn sp-btn--primary" (click)="changePassword()">Update Password</button>
     </div>
   </div>
 </div>
 
-<!-- PAGE -->
-<div class="sprof-page">
-  <div class="sprof-layout">
+<!-- ══ MAIN PAGE ══ -->
+<div class="sp-page">
 
-    <!-- ═══ LEFT COLUMN ═══ -->
-    <div class="sprof-left">
+  <!-- ── HERO BANNER ── -->
+  <div class="sp-hero">
+    <!-- BG particles / orbs -->
+    <div class="sp-hero-orb sp-orb1"></div>
+    <div class="sp-hero-orb sp-orb2"></div>
+    <div class="sp-hero-orb sp-orb3"></div>
+    <div class="sp-hero-grid"></div>
 
-      <!-- Profile Card -->
-      <div class="sprof-card">
-        <!-- Avatar -->
-        <div class="sprof-av-area">
-          <div class="sprof-av-ring-outer"></div>
-          <div class="sprof-av-ring-inner"></div>
-          <div class="sprof-av">{{ getInitials() }}</div>
-          <div class="sprof-online-dot"></div>
-        </div>
-
-        <h2 class="sprof-name">{{ user?.name || 'Student' }}</h2>
-        <div class="sprof-badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-          Student · EduBoost
-        </div>
-
-        <div class="sprof-contact-list">
-          <div class="sprof-contact-item">
-            <div class="sprof-ci-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            </div>
-            <span>{{ user?.email || '—' }}</span>
-          </div>
-          <div class="sprof-contact-item">
-            <div class="sprof-ci-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5.06 2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 18z"/></svg>
-            </div>
-            <span>{{ user?.phone || 'Not set' }}</span>
-          </div>
-          <div class="sprof-contact-item">
-            <div class="sprof-ci-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            </div>
-            <span>Joined {{ getJoinDate() }}</span>
-          </div>
-        </div>
-
-        <div class="sprof-divider"></div>
-
-        <!-- Mini stats -->
-        <div class="sprof-stats-row">
-          <div class="sprof-stat-mini">
-            <span class="psm-val">6</span>
-            <span class="psm-lbl">Courses</span>
-          </div>
-          <div class="sprof-stat-sep"></div>
-          <div class="sprof-stat-mini">
-            <span class="psm-val">8</span>
-            <span class="psm-lbl">Quizzes</span>
-          </div>
-          <div class="sprof-stat-sep"></div>
-          <div class="sprof-stat-mini">
-            <span class="psm-val">72%</span>
-            <span class="psm-lbl">Avg Score</span>
-          </div>
-        </div>
-
-        <div class="sprof-divider"></div>
-
-        <!-- Action buttons -->
-        <div class="sprof-actions">
-          <button class="sprof-btn-primary" style="width:100%;justify-content:center" (click)="startEdit()" *ngIf="!editMode">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
-            Edit Profile
-          </button>
-          <button class="sprof-btn-ghost" style="width:100%;justify-content:center" (click)="showPwModal=true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Change Password
-          </button>
-        </div>
-      </div>
-
+    <!-- Avatar with spinning ring -->
+    <div class="sp-av-wrap">
+      <svg class="sp-av-orbital" viewBox="0 0 120 120">
+        <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(110,231,183,.4)"
+                stroke-width="1.5" stroke-dasharray="10 5"/>
+        <circle cx="60" cy="6" r="5" fill="#4ade80"/>
+      </svg>
+      <div class="sp-av">{{ getInitials() }}</div>
+      <div class="sp-av-online"></div>
     </div>
 
-    <!-- ═══ RIGHT COLUMN ═══ -->
-    <div class="sprof-right">
-
-      <!-- ── Edit Profile Form ── -->
-      <div class="sprof-section" *ngIf="editMode">
-        <div class="sprof-sec-head">
-          <div class="sprof-sec-icon si-indigo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
-          </div>
-          <div>
-            <h3>Edit Profile</h3>
-            <p>Update your personal information</p>
-          </div>
-        </div>
-
-        <div class="sprof-form">
-          <div class="sprof-form-row">
-            <div class="sprof-field">
-              <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                Full Name
-              </label>
-              <input [(ngModel)]="editForm.name" placeholder="Your full name" />
-            </div>
-            <div class="sprof-field">
-              <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5.06 2 2 0 0 1 3.58 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6 6z"/></svg>
-                Phone Number
-              </label>
-              <input [(ngModel)]="editForm.phone" placeholder="+213 555 0000" />
-            </div>
-          </div>
-          <div class="sprof-field">
-            <label>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              Email Address
-            </label>
-            <input [(ngModel)]="editForm.email" placeholder="your@email.com" type="email" />
-          </div>
-
-          <div class="sprof-form-actions">
-            <button class="sprof-btn-ghost" (click)="cancelEdit()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              Cancel
-            </button>
-            <button class="sprof-btn-primary" (click)="saveProfile()" [disabled]="saving">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              {{ saving ? 'Saving…' : 'Save Changes' }}
-            </button>
-          </div>
-        </div>
+    <!-- Identity block -->
+    <div class="sp-hero-info">
+      <div class="sp-hero-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11">
+          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+        </svg>
+        Student
       </div>
-
-      <!-- ── Achievements ── -->
-      <div class="sprof-section">
-        <div class="sprof-sec-head">
-          <div class="sprof-sec-icon si-amber">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          </div>
-          <div>
-            <h3>Achievements</h3>
-            <p>Your learning milestones</p>
-          </div>
-        </div>
-        <div class="sprof-ach-grid">
-          <div *ngFor="let a of achievements" class="sprof-ach-card" [ngClass]="'ach-'+a.color">
-            <div class="sprof-ach-emoji">{{ a.icon }}</div>
-            <div class="sprof-ach-name">{{ a.label }}</div>
-            <div class="sprof-ach-date">{{ a.date }}</div>
-          </div>
-        </div>
+      <h1 class="sp-hero-name">{{ user?.name }}</h1>
+      <p class="sp-hero-email">{{ user?.email }}</p>
+      <div class="sp-hero-meta">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+            <rect x="3" y="4" width="18" height="18" rx="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          Joined {{ getJoinDate() }}
+        </span>
       </div>
-
-      <!-- ── Learning Overview ── -->
-      <div class="sprof-section">
-        <div class="sprof-sec-head">
-          <div class="sprof-sec-icon si-cyan">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          </div>
-          <div>
-            <h3>Learning Overview</h3>
-            <p>Your activity summary</p>
-          </div>
-        </div>
-        <div class="sprof-overview-grid">
-          <div class="sprof-ov-card ov-indigo">
-            <div class="sprof-ov-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            </div>
-            <div class="sprof-ov-val">24h 35m</div>
-            <div class="sprof-ov-lbl">Study Time</div>
-          </div>
-          <div class="sprof-ov-card ov-green">
-            <div class="sprof-ov-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            </div>
-            <div class="sprof-ov-val">18 / 30</div>
-            <div class="sprof-ov-lbl">Chapters</div>
-          </div>
-          <div class="sprof-ov-card ov-cyan">
-            <div class="sprof-ov-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            </div>
-            <div class="sprof-ov-val">6 / 8</div>
-            <div class="sprof-ov-lbl">Quizzes Passed</div>
-          </div>
-          <div class="sprof-ov-card ov-amber">
-            <div class="sprof-ov-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-            </div>
-            <div class="sprof-ov-val">7 Days 🔥</div>
-            <div class="sprof-ov-lbl">Current Streak</div>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- Orbital KPI stats -->
+    <div class="sp-hero-stats">
+      <div class="sp-kpi">
+        <div class="sp-kpi-val">{{ quizCount }}</div>
+        <div class="sp-kpi-lbl">Quizzes Done</div>
+      </div>
+      <div class="sp-kpi-div"></div>
+      <div class="sp-kpi">
+        <div class="sp-kpi-val">{{ avgScore }}%</div>
+        <div class="sp-kpi-lbl">Avg Score</div>
+      </div>
+      <div class="sp-kpi-div"></div>
+      <div class="sp-kpi">
+        <div class="sp-kpi-val">{{ courseCount }}</div>
+        <div class="sp-kpi-lbl">Courses</div>
+      </div>
+      <div class="sp-kpi-div"></div>
+      <div class="sp-kpi">
+        <div class="sp-kpi-val">🔥7</div>
+        <div class="sp-kpi-lbl">Day Streak</div>
+      </div>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="sp-hero-cta">
+      <button class="sp-hero-btn sp-hero-btn--solid" (click)="startEdit()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="13" height="13">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit Profile
+      </button>
+      <button class="sp-hero-btn sp-hero-btn--ghost" (click)="showPwModal=true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        Security
+      </button>
+    </div>
+  </div>
+
+  <!-- ── EDIT FORM (full-width panel) ── -->
+  <div class="sp-edit-panel" *ngIf="editMode">
+    <div class="sp-panel-head">
+      <div class="sp-panel-ico sp-ico--green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div><h3>Edit Profile</h3><p>Update your personal information</p></div>
+    </div>
+    <div class="sp-edit-form">
+      <div class="sp-edit-row">
+        <div class="sp-field"><label>Full Name</label>
+          <input [(ngModel)]="editForm.name" placeholder="Your full name"/></div>
+        <div class="sp-field"><label>Email Address</label>
+          <input [(ngModel)]="editForm.email" type="email" placeholder="your@email.com"/></div>
+      </div>
+      <div class="sp-edit-actions">
+        <button class="sp-btn sp-btn--ghost" (click)="cancelEdit()">Cancel</button>
+        <button class="sp-btn sp-btn--primary" (click)="saveProfile()" [disabled]="saving">
+          {{ saving ? 'Saving…' : 'Save Changes' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BOTTOM GRID ── -->
+  <div class="sp-grid">
+
+    <!-- Achievements -->
+    <div class="sp-card">
+      <div class="sp-panel-head">
+        <div class="sp-panel-ico sp-ico--amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div><h3>Achievements</h3><p>Your learning milestones</p></div>
+      </div>
+      <div class="sp-ach-grid">
+        <div *ngFor="let a of achievements" class="sp-ach" [class]="'sp-ach--'+a.color">
+          <div class="sp-ach-em">{{ a.icon }}</div>
+          <div class="sp-ach-name">{{ a.label }}</div>
+          <div class="sp-ach-date">{{ a.date }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learning stats -->
+    <div class="sp-card">
+      <div class="sp-panel-head">
+        <div class="sp-panel-ico sp-ico--cyan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+        </div>
+        <div><h3>Learning Stats</h3><p>Your progress this month</p></div>
+      </div>
+      <div class="sp-stats-grid">
+        <div class="sp-stat sp-stat--green">
+          <div class="sp-stat-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="sp-stat-val">24h</div>
+          <div class="sp-stat-lbl">Study Time</div>
+        </div>
+        <div class="sp-stat sp-stat--violet">
+          <div class="sp-stat-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </div>
+          <div class="sp-stat-val">18</div>
+          <div class="sp-stat-lbl">Chapters</div>
+        </div>
+        <div class="sp-stat sp-stat--cyan">
+          <div class="sp-stat-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="sp-stat-val">{{ quizCount }}</div>
+          <div class="sp-stat-lbl">Quizzes</div>
+        </div>
+        <div class="sp-stat sp-stat--amber">
+          <div class="sp-stat-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <div class="sp-stat-val">{{ avgScore }}%</div>
+          <div class="sp-stat-lbl">Avg Score</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
