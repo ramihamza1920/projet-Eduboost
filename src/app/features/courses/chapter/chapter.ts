@@ -1,8 +1,8 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser, CommonModule, Location } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 import { CourseService } from '../../../core/services/course.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { CourseService } from '../../../core/services/course.service';
   templateUrl: './chapter.html',
   styleUrls: ['./chapter.css']
 })
-export class ChapterComponent implements OnInit {
+export class ChapterComponent implements OnInit, OnDestroy {
   course:       any = null;
   chapter:      any = null;
   courseId:     number = 0;
@@ -20,50 +20,20 @@ export class ChapterComponent implements OnInit {
   videoUrl:     SafeResourceUrl | null = null;
   videoPlaying  = false;
 
-  // YouTube video mapping: courseId -> chapterId -> YouTube video ID
+  private sub!: Subscription;
+
   private videoMap: Record<number, Record<number, string>> = {
-    1: { // Introduction to Mathematics
-      1: 'ORueTGEP-jg',  // Numbers & Operations
-      2: 'NybHckSEQBI',  // Algebra Basics
-      3: 'XGeXQS2QQAA',  // Geometry Fundamentals
-      4: 'WUvTyaaNkzM',  // Calculus Introduction
-    },
-    2: { // Web Design with CSS
-      1: 'l1mER1bV0N0',  // CSS Selectors
-      2: 'JJSoEo8JSnc',  // Flexbox
-      3: 'EiNiSFIPIQE',  // CSS Grid
-      4: 'SgmNxE9lWcY',  // Animations
-      5: 'yU7jJ3NbPdA',  // Responsive Design
-    },
-    3: { // Python Programming
-      1: 'kqtD5dpn9C8',  // Variables & Data Types
-      2: '_uQrJ0TkZlc',  // Control Flow
-      3: 'u-OmVr_fT4s',  // Functions
-      4: 'W8KRzm-HUcc',  // Lists & Dicts
-      5: 'JeznW_7DlB0',  // OOP
-      6: 'Uh2ebFW8OO0',  // File I/O
-    },
-    4: { // Data Science
-      1: 'vmEHCJofslg',  // NumPy & Pandas
-      2: 'a9UrKTVEeZA',  // Visualization
-      3: 'oBU7PFdD_04',  // Data Cleaning
-      4: 'i_LwzRVP7bg',  // Machine Learning
-    },
-    5: { // English Communication
-      1: 'CzxGXFEt0_E',  // Business Writing
-      2: 'JNOXZumCXNM',  // Presentation Skills
-      3: 'sJYUhSGvs-E',  // Meeting Language
-    },
-    6: { // Digital Marketing
-      1: 'hF515-0Tduk',  // SEO
-      2: 'nMBRHT2Z8WY',  // Social Media
-      3: 'Q0hi2X84h2g',  // Email Marketing
-      4: 'i4pqMIDOFIo',  // Analytics
-    },
+    1: { 1:'ORueTGEP-jg', 2:'NybHckSEQBI', 3:'XGeXQS2QQAA', 4:'WUvTyaaNkzM' },
+    2: { 1:'l1mER1bV0N0', 2:'JJSoEo8JSnc', 3:'EiNiSFIPIQE', 4:'SgmNxE9lWcY', 5:'yU7jJ3NbPdA' },
+    3: { 1:'kqtD5dpn9C8', 2:'_uQrJ0TkZlc', 3:'u-OmVr_fT4s', 4:'W8KRzm-HUcc', 5:'JeznW_7DlB0', 6:'Uh2ebFW8OO0' },
+    4: { 1:'vmEHCJofslg', 2:'a9UrKTVEeZA', 3:'oBU7PFdD_04', 4:'i_LwzRVP7bg' },
+    5: { 1:'CzxGXFEt0_E', 2:'JNOXZumCXNM', 3:'sJYUhSGvs-E' },
+    6: { 1:'hF515-0Tduk', 2:'nMBRHT2Z8WY', 3:'Q0hi2X84h2g', 4:'i4pqMIDOFIo' },
   };
 
   constructor(
     private route:     ActivatedRoute,
+    private router:    Router,
     private cs:        CourseService,
     private location:  Location,
     private sanitizer: DomSanitizer,
@@ -71,25 +41,41 @@ export class ChapterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (!isPlatformBrowser(this.platformId)) return;
-    const courseId  = Number(this.route.snapshot.params['courseId']);
-    const chapterId = Number(this.route.snapshot.params['chapterId']);
-    this.courseId = courseId;
-    this.course   = this.cs.getCourse(courseId);
-    if (this.course) {
-      this.chapterIndex = (this.course.chapters || []).findIndex((c: any) => c.id == chapterId);
-      this.chapter      = this.course.chapters?.[this.chapterIndex] || null;
-    }
-    // Reset play state on navigation
-    this.videoPlaying = false;
-    this.videoUrl = null;
+    // ✅ KEY FIX: paramMap fires on every param change (sidebar / next / prev)
+    this.sub = this.route.paramMap.subscribe(params => {
+      const courseId  = Number(params.get('courseId'));
+      const chapterId = Number(params.get('chapterId'));
+
+      this.courseId     = courseId;
+      this.course       = this.cs.getCourse(courseId);
+      // Reset video every time chapter changes
+      this.videoPlaying = false;
+      this.videoUrl     = null;
+
+      if (this.course) {
+        const idx = (this.course.chapters || []).findIndex((c: any) => c.id == chapterId);
+        this.chapterIndex = idx >= 0 ? idx : 0;
+        this.chapter      = this.course.chapters?.[this.chapterIndex] || null;
+      } else {
+        this.chapter = null;
+      }
+    });
+  }
+
+  ngOnDestroy() { this.sub?.unsubscribe(); }
+
+  // Used by sidebar buttons to navigate reactively
+  goToChapter(ch: any) {
+    this.router.navigate(['/courses', this.courseId, 'chapters', ch.id]);
   }
 
   playVideo() {
+    if (!isPlatformBrowser(this.platformId)) return;
     const vid = this.videoMap[this.courseId]?.[this.chapter?.id];
     if (vid) {
-      const url = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&modestbranding=1`;
-      this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+        `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&modestbranding=1`
+      );
     }
     this.videoPlaying = true;
   }
