@@ -15,7 +15,7 @@ export class ChatbotComponent implements AfterViewChecked {
   @ViewChild('scrollEl') scrollEl!: ElementRef;
 
   messages: Array<{from:string, text:string, time:string}> = [
-    { from: 'bot', text: 'Hello! I\'m EduBot, your AI learning assistant. How can I help you today? 🎓', time: this.now() }
+    { from: 'bot', text: 'Hello! I\'m EduBoost, your AI learning assistant. How can I help you today? 🎓', time: this.now() }
   ];
   input = '';
   isTyping = false;
