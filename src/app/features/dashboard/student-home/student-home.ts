@@ -18,22 +18,14 @@ export class StudentHomeComponent implements OnInit {
   progressList: any[] = [];
   recommendations: any[] = [];
 
-  // Static enriched stats
   stats = [
-    { label: 'Enrolled Courses', value: 6,    icon: 'book',    color: 'indigo', sub: '+2 this month' },
-    { label: 'Completed',        value: 2,    icon: 'check',   color: 'green',  sub: '33% completion rate' },
-    { label: 'Quizzes Passed',   value: 8,    icon: 'quiz',    color: 'cyan',   sub: 'Avg score 78%' },
-    { label: 'Hours Learned',    value: '24h',icon: 'clock',   color: 'amber',  sub: 'Last 30 days' },
+    { label: 'Enrolled Courses', value: 0,    icon: 'book',    color: 'indigo', sub: '' },
+    { label: 'Completed',        value: 0,    icon: 'check',   color: 'green',  sub: '' },
+    { label: 'Quizzes Passed',   value: 0,    icon: 'quiz',    color: 'cyan',   sub: '' },
+    { label: 'Hours Learned',    value: '0h', icon: 'clock',   color: 'amber',  sub: 'Last 30 days' },
   ];
 
-  recentActivity = [
-    { type: 'quiz',    label: 'Completed Quiz', detail: 'Python Basics Quiz — Score 85%',    time: '2h ago',   icon: 'quiz',  color: 'cyan' },
-    { type: 'chapter', label: 'Read Chapter',   detail: 'Variables & Data Types — Python',    time: '3h ago',   icon: 'book',  color: 'indigo' },
-    { type: 'chapter', label: 'Read Chapter',   detail: 'Flexbox Layout — CSS Design',        time: '1d ago',   icon: 'book',  color: 'indigo' },
-    { type: 'course',  label: 'Enrolled',       detail: 'Data Science Fundamentals',          time: '2d ago',   icon: 'star',  color: 'amber' },
-    { type: 'quiz',    label: 'Completed Quiz', detail: 'Numbers & Algebra — Score 70%',      time: '3d ago',   icon: 'quiz',  color: 'cyan' },
-  ];
-
+  recentActivity: any[] = [];
   continueCourses: any[] = [];
 
   constructor(
@@ -51,7 +43,6 @@ export class StudentHomeComponent implements OnInit {
     const h = new Date().getHours();
     this.greeting = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
 
-    // Progress list with static enriched data
     this.progressList = this.courses.slice(0, 6).map((c, i) => {
       const staticProgress = [72, 45, 88, 30, 60, 15][i] || 0;
       return {
@@ -70,6 +61,33 @@ export class StudentHomeComponent implements OnInit {
       .filter(p => p.progress < 80)
       .map(p => ({ course: p.course, rec: p.rec, risk: p.risk }))
       .slice(0, 3);
+
+    // Stats from real data
+    if (this.user) {
+      const attempts = this.cs.getAttemptsForUser(this.user.id);
+      const passed = attempts.filter((a: any) => a.score >= 50).length;
+      this.stats[0].value = this.courses.length;
+      this.stats[0].sub = `${this.courses.length} total courses`;
+      this.stats[1].value = this.progressList.filter(p => p.progress === 100).length;
+      this.stats[1].sub = this.progressList.length ? Math.round(this.progressList.filter(p=>p.progress===100).length/this.progressList.length*100)+'% completion rate' : '';
+      this.stats[2].value = passed;
+      this.stats[2].sub = attempts.length ? `Avg score ${Math.round(attempts.reduce((s:number,a:any)=>s+a.score,0)/attempts.length)}%` : 'No quizzes yet';
+
+      // Real recent activity from notifications/history
+      const notifs = this.auth.getNotifications ? this.auth.getNotifications() : [];
+      this.recentActivity = notifs.slice(0, 5).map((n: any) => ({
+        label: n.text,
+        detail: n.detail || '',
+        time: n.time || n.createdAt || '',
+        icon: n.type === 'quiz' ? 'quiz' : n.type === 'course' ? 'star' : 'book',
+        color: n.color || 'indigo'
+      }));
+
+      // If no notifications, fallback to empty with a message
+      if (!this.recentActivity.length) {
+        this.recentActivity = [];
+      }
+    }
   }
 
   getRiskColor(risk: string) {

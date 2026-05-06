@@ -88,12 +88,6 @@ export class AdminUsersComponent implements OnInit {
     this.showToast('User deleted', 'danger');
   }
 
-  toggle(u: any) {
-    this.auth.toggleUserDisabled(u.id);
-    this.load();
-    this.showToast(`User ${u.disabled ? 'enabled' : 'disabled'}`, 'info');
-  }
-
   showToast(msg: string, type: string) {
     clearTimeout(this.toastTimeout);
     this.toast = { msg, type };

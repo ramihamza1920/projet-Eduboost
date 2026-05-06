@@ -19,20 +19,13 @@
 
 /* Glass form */
 .login-box{
-
   width:380px;
   padding:40px;
-
   background:rgba(25, 78, 4, 0.534);
-
   border-radius:12px;
-
   backdrop-filter:blur(10px);
-
   box-shadow:0 10px 40px rgba(0,0,0,0.3);
-
   text-align:center;
-
   color:rgb(255, 255, 255);
 }
 
@@ -44,44 +37,75 @@
 /* inputs */
 
 .input-group{
-  margin-bottom:18px;
+  margin-bottom: 20px;
 }
 
 .input-group input{
+  width: 100%;        /* largeur */
+  height: 45px;       /* hauteur */
+  padding: 10px 15px; /* espace intérieur */
+  font-size: 16px;    /* taille du texte */
+  border-radius: 5px; /* optionnel: coins arrondis */
+}
+.input-icon-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
 
+.field-icon{
+  position:absolute;
+  left:14px;
+  width:16px;
+  height:16px;
+  color:#333;
+  pointer-events:none;
+  z-index:1;
+}
+
+.input-icon-wrap input{
   width:100%;
-  padding:12px 15px;
-
+  padding:12px 40px 12px 40px;
   border:none;
   border-radius:30px;
-
   outline:none;
-
   background:rgba(255,255,255,0.8);
+  color:#000;
+}
+
+.input-icon-wrap input::placeholder{
+  color:#555;
+}
+
+.eye-btn{
+  position:absolute;
+  right:12px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  padding:0;
+  display:flex;
+  align-items:center;
+  color:#555;
+}
+
+.eye-btn svg{
+  width:16px;
+  height:16px;
 }
 
 /* button */
 
 .login-btn{
-
   width:100%;
-
   padding:12px;
-
   border:none;
-
   border-radius:30px;
-
   background:rgba(25, 78, 4, 0.534);
-
-  color:#333;
-
+  color:#fff;
   font-weight:600;
-
   margin-top:10px;
-
   cursor:pointer;
-
   transition:0.3s;
 }
 
@@ -92,13 +116,9 @@
 /* options */
 
 .options{
-
   display:flex;
-
   justify-content:space-between;
-
   margin-top:10px;
-
   font-size:13px;
 }
 
@@ -118,58 +138,6 @@
   color:#ffdddd;
 }
 
-/* social */
-
-.social-login{
-  margin-top:20px;
-}
-
-.social-login p{
-  font-size:13px;
-  margin-bottom:10px;
-}
-
-.social-buttons{
-  display:flex;
-  gap:10px;
-}
-
-.social-buttons button{
-
-  flex:1;
-
-  border:none;
-
-  padding:10px;
-
-  border-radius:6px;
-
-  cursor:pointer;
-
-  font-size:14px;
-}
-
-.facebook{
-  background:#3b5998;
-  color:white;
-}
-
-.twitter{
-  background:#0b0c0c;
-  color:white;
-}
-
-.social-buttons button{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-}
-
-.social-buttons i{
-  font-size:16px;
-}
-
 .register-link{
   margin-top:15px;
 }
@@ -182,16 +150,4 @@
 
 .register-link a:hover{
   text-decoration:underline;
-}
-
-.social-buttons button{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-}
-
-.social-buttons img{
-  width:18px;
-  height:18px;
 }

@@ -16,6 +16,7 @@ export class LoginComponent {
   email = '';
   password = '';
   message = '';
+  showPassword = false;
   private returnUrl = '/dashboard';
 
   constructor(private router: Router, private route: ActivatedRoute, private auth: AuthService, @Inject(PLATFORM_ID) private platformId: Object) {

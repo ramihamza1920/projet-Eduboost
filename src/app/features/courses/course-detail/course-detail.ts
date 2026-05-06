@@ -25,7 +25,6 @@ export class CourseDetailComponent implements OnInit {
   feedbackToast: string | null = null;
   toastTimer: any;
   userFeedback: any = null;      // existing feedback from this user
-  isEditingFeedback = false;
 
   /* Tabs */
   activeTab: 'chapters' | 'quizzes' | 'feedback' = 'chapters';
@@ -62,13 +61,7 @@ export class CourseDetailComponent implements OnInit {
   }
 
   openFeedback() {
-    if (this.userFeedback) {
-      this.feedbackForm = { rating: this.userFeedback.rating, comment: this.userFeedback.comment };
-      this.isEditingFeedback = true;
-    } else {
-      this.feedbackForm = { rating: 0, comment: '' };
-      this.isEditingFeedback = false;
-    }
+    this.feedbackForm = { rating: 0, comment: '' };
     this.feedbackError = '';
     this.feedbackHover = 0;
     this.showFeedbackModal = true;
@@ -89,21 +82,12 @@ export class CourseDetailComponent implements OnInit {
     const userName = this.currentUser?.name || 'Anonymous';
     const avatar = this.currentUser?.avatar || userName[0]?.toUpperCase() || 'U';
 
-    if (this.isEditingFeedback && this.userFeedback) {
-      const idx = this.feedbacks.findIndex((f: any) => f.userId === userId);
-      if (idx > -1) {
-        this.feedbacks[idx] = { ...this.feedbacks[idx], rating: this.feedbackForm.rating, comment: this.feedbackForm.comment, updatedAt: timeStr };
-        this.userFeedback = this.feedbacks[idx];
-      }
-      this.showToast('Feedback updated!');
-    } else {
-      const fb = { id: Date.now(), userId, userName, avatar, rating: this.feedbackForm.rating, comment: this.feedbackForm.comment, createdAt: timeStr };
-      this.feedbacks.unshift(fb);
-      this.userFeedback = fb;
-      this.showToast('Feedback submitted! Thank you 🎉');
-    }
+    const fb = { id: Date.now(), userId, userName, avatar, rating: this.feedbackForm.rating, comment: this.feedbackForm.comment, createdAt: timeStr };
+    this.feedbacks.unshift(fb);
+    this.userFeedback = fb;
     this.saveFeedbacks();
     this.closeFeedback();
+    this.showToast('Feedback submitted! Thank you 🎉');
   }
 
   deleteFeedback(fb: any) {

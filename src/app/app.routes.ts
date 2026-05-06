@@ -5,44 +5,13 @@ import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-
 import { RoleGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
-  // Default redirect
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  // Default redirect to login
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
 
   // Auth
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-
-  // Mentor public pages
-  {
-    path: 'home',
-    loadComponent: () => import('./mentor/index/index').then(m => m.Index)
-  },
-  {
-    path: 'about',
-    loadComponent: () => import('./mentor/about/about').then(m => m.About)
-  },
-  {
-    path: 'mentor/courses',
-    loadComponent: () => import('./mentor/courses/courses').then(m => m.Courses)
-  },
-  
-  {
-    path: 'mentor/pricing',
-    loadComponent: () => import('./mentor/pricing/pricing').then(m => m.Pricing)
-  },
-  {
-    path: 'mentor/contact',
-    loadComponent: () => import('./mentor/contact/contact').then(m => m.Contact)
-  },
-  {
-    path: 'events',
-    loadComponent: () => import('./mentor/events/events').then(m => m.Events)
-  },
-  {
-    path: 'mentor/course-details',
-    loadComponent: () => import('./mentor/course-details/course-details').then(m => m.CourseDetails)
-  },
 
   // Student dashboard
   {
@@ -64,11 +33,11 @@ export const routes: Routes = [
       { path: 'courses',  loadComponent: () => import('./features/dashboard/student-courses/student-courses').then(m => m.StudentCoursesComponent) },
       { path: 'progress', loadComponent: () => import('./features/dashboard/student-progress/student-progress').then(m => m.StudentProgressComponent) },
       { path: 'profile',  loadComponent: () => import('./features/dashboard/student-profile/student-profile').then(m => m.StudentProfileComponent) },
- // ✅ Student settings — own green design
-      { path: 'settings', loadComponent: () => import('./features/dashboard/student-settings/student-settings').then(m => m.StudentSettingsComponent) },    ]
+      { path: 'settings', loadComponent: () => import('./features/dashboard/student-settings/student-settings').then(m => m.StudentSettingsComponent) },
+    ]
   },
 
-  // ✅ Admin dashboard — with admin/profile child route
+  // Admin dashboard
   {
     path: 'admin',
     loadComponent: () => import('./features/admin/admin-layout').then(m => m.default),
@@ -77,9 +46,7 @@ export const routes: Routes = [
       { path: '',        loadComponent: () => import('./features/admin/admin-dash').then(m => m.default) },
       { path: 'courses', loadComponent: () => import('./features/admin/courses/admin-courses').then(m => m.AdminCoursesComponent) },
       { path: 'users',   loadComponent: () => import('./features/admin/users/users').then(m => m.AdminUsersComponent) },
-      // ✅ Admin profile — separate from student profile
       { path: 'profile', loadComponent: () => import('./features/admin/admin-profile/admin-profile').then(m => m.AdminProfileComponent) },
-       // ✅ Admin settings — own dark design
       { path: 'settings', loadComponent: () => import('./features/admin/admin-settings/admin-settings').then(m => m.AdminSettingsComponent) },
     ]
   },
@@ -88,13 +55,13 @@ export const routes: Routes = [
   { path: 'catalog',     loadComponent: () => import('./features/courses/course-list/course-list').then(m => m.CourseListComponent) },
   { path: 'courses/:id', loadComponent: () => import('./features/courses/course-detail/course-detail').then(m => m.CourseDetailComponent) },
 
-  // ✅ Quiz route
+  // Quiz route
   {
     path: 'courses/:courseId/quizzes/:quizId',
     loadComponent: () => import('./features/quiz/quiz').then(m => m.QuizComponent)
   },
 
-  // ✅ Chapter / Start Learning route
+  // Chapter / Start Learning route
   {
     path: 'courses/:courseId/chapters/:chapterId',
     loadComponent: () => import('./features/courses/chapter/chapter').then(m => m.ChapterComponent)
@@ -106,5 +73,5 @@ export const routes: Routes = [
   // Access denied
   { path: 'access-denied', loadComponent: () => import('./features/shared/access-denied/access-denied').then(m => m.AccessDeniedComponent) },
 
-  { path: '**', redirectTo: '/home' }
+  { path: '**', redirectTo: '/login' }
 ];

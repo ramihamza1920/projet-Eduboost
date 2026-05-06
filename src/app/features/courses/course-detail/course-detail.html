@@ -13,7 +13,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         </div>
         <div>
-          <h3>{{ isEditingFeedback ? 'Edit your feedback' : 'Leave feedback' }}</h3>
+          <h3>Leave feedback</h3>
           <p>Your review helps others make better decisions</p>
         </div>
       </div>
@@ -54,7 +54,7 @@
       <button class="btn-cancel" (click)="closeFeedback()">Cancel</button>
       <button class="btn-submit" (click)="submitFeedback()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-        {{ isEditingFeedback ? 'Update' : 'Submit Feedback' }}
+        Submit Feedback
       </button>
     </div>
   </div>
@@ -100,7 +100,7 @@
           </a>
           <button class="btn-feedback" (click)="openFeedback(); activeTab='feedback'">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            {{ userFeedback ? 'Edit my feedback' : 'Leave Feedback' }}
+            Leave Feedback
           </button>
         </div>
       </div>
@@ -210,34 +210,8 @@
         </div>
         <button class="btn-add-feedback" (click)="openFeedback()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          {{ userFeedback ? 'Edit my review' : 'Write a review' }}
+          Write a review
         </button>
-      </div>
-
-      <!-- My feedback highlight -->
-      <div class="my-feedback-card" *ngIf="userFeedback">
-        <div class="mfc-label">Your review</div>
-        <div class="mfc-inner">
-          <div class="fb-avatar">{{ userFeedback.avatar }}</div>
-          <div class="fb-content">
-            <div class="fb-top">
-              <span class="fb-name">{{ userFeedback.userName }} <span class="you-chip">You</span></span>
-              <div class="fb-stars">
-                <span *ngFor="let s of stars" [ngClass]="s <= userFeedback.rating ? 'star-on' : 'star-off'">★</span>
-              </div>
-            </div>
-            <div class="fb-comment">{{ userFeedback.comment }}</div>
-            <div class="fb-date">{{ userFeedback.updatedAt || userFeedback.createdAt }}</div>
-          </div>
-          <div class="fb-actions">
-            <button class="fba-edit" (click)="openFeedback()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            </button>
-            <button class="fba-del" (click)="deleteFeedback(userFeedback)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-            </button>
-          </div>
-        </div>
       </div>
 
       <!-- All feedbacks -->
@@ -246,7 +220,7 @@
           <div class="fb-avatar">{{ fb.avatar }}</div>
           <div class="fb-content">
             <div class="fb-top">
-              <span class="fb-name">{{ fb.userName }}</span>
+              <span class="fb-name">{{ fb.userName }} <span class="you-chip" *ngIf="currentUser?.id === fb.userId">You</span></span>
               <div class="fb-stars">
                 <span *ngFor="let s of stars" [ngClass]="s <= fb.rating ? 'star-on' : 'star-off'">★</span>
               </div>
@@ -254,9 +228,11 @@
             <div class="fb-comment">{{ fb.comment }}</div>
             <div class="fb-date">{{ fb.updatedAt ? 'Updated ' + fb.updatedAt : fb.createdAt }}</div>
           </div>
-          <button class="fba-del" *ngIf="currentUser?.id === fb.userId" (click)="deleteFeedback(fb)" title="Delete">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-          </button>
+          <div class="fb-actions" *ngIf="currentUser?.id === fb.userId">
+            <button class="fba-del" (click)="deleteFeedback(fb)" title="Delete">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -272,9 +248,3 @@
 </div>
 
 <ng-template #notFound>
-  <div class="not-found">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <h2>Course not found</h2>
-    <button class="btn-cancel" (click)="goBack()">Go back</button>
-  </div>
-</ng-template>

@@ -85,6 +85,7 @@
         <span class="sh-panel-badge">{{ recentActivity.length }}</span>
       </div>
       <div class="sh-activity">
+        <div class="sh-empty" *ngIf="!recentActivity.length"><p>No recent activity yet.</p></div>
         <div *ngFor="let a of recentActivity; let i=index" class="sh-act-item" [style.animation-delay]="(i*55)+'ms'">
           <div class="sh-act-icon" [ngClass]="'ai-'+a.color">
             <svg *ngIf="a.icon==='quiz'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/></svg>
